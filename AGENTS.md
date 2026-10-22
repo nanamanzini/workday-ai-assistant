@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- AI calls go through server functions in src/lib/ai.functions.ts using @lovable.dev/ai-gateway; keys stay server-side and no app state is persisted (session-only by user requirement).
+- App shell (sidebar + mobile drawer) lives in src/components/app-shell.tsx and wraps <Outlet /> in __root.
