@@ -15,8 +15,8 @@ function extractText(res: unknown): string {
     .trim();
 }
 
-async function callAI(instructions: string, input: Msg[]): Promise<{ text?: string; error?: string }> {
-  if (!process.env.LOVABLE_API_KEY) {
+async function callAI(instructions: string, input: Msg[]): Promise<{ text?: string; error?: string; urlFailed?: boolean }> {
+  if (!process.env["LOVABLE_API_KEY"]) {
     return { error: "No AI service is configured for this app yet. The interface is ready — connect an AI service to enable responses." };
   }
   try {
@@ -117,7 +117,8 @@ export const runResearch = createServerFn({ method: "POST" })
     if (data.mode === "url") {
       const f = await fetchUrlText(material);
       if (!f.text) {
-        return { error: `This URL could not be accessed: ${f.reason} Try copying the article text and pasting it under "Article" instead.`, urlFailed: true };
+        const r: { text?: string; error?: string; urlFailed?: boolean } = { error: `This URL could not be accessed: ${f.reason} Try copying the article text and pasting it under "Article" instead.`, urlFailed: true };
+        return r;
       }
       sourceNote = `Source URL: ${material}\n\n`;
       material = f.text;
